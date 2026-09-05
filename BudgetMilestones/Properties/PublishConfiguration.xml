@@ -27,7 +27,7 @@ Set up your city the way you want — normal start, harder start, or a quick hea
 No Harmony patch.
 </LongDescription>
 <Tag Value="Code Mod" />
-<ModVersion Value="1.0.0" />
+<ModVersion Value="0.5.0" />
 <GameVersion Value="1.6.*" />
 <ChangeLog>
 - Initial release.
