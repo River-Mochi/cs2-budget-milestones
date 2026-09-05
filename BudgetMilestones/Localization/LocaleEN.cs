@@ -54,18 +54,12 @@ namespace BudgetMilestones
                 },
                 { m_Settings.GetOptionLocaleID("GameDefault"), "Game Default" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.CustomMilestone)), "Milestone Selector" },
-                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.CustomMilestone)),
-                    "Enable <before loading or starting a city> to unlock a chosen milestone immediately after the city loads.\n" +
-                    "- Cannot be turned ON after a city is loaded, but it can be turned OFF if it was left enabled by mistake.\n" +
-                    "- If you forgot and loaded a city, restart the game and pick the milestone before entering a city.\n" +
-                    "- The mod cannot undo milestone changes already saved into a city; use an earlier save if needed."
-                },
+                { m_Settings.GetOptionLocaleID("NoExtraMilestone"), "Game Default - No Milestone Skip" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.MilestoneLevel)), "Milestone" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.MilestoneLevel)), "Starting Milestone" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.MilestoneLevel)),
-                    "Pick a milestone level to unlock on the next city load.\n" +
-                    "This is <only adjustable outside a loaded city>, and only after Milestone Selector is enabled [ ✓ ].\n" +
+                    "Leave this at <Game Default - No Milestone Skip> for normal progression.\n" +
+                    "Or pick a milestone to unlock when the next city loads.\n" +
                     "If the city is already at or past the selected milestone, nothing happens."
                 },
 
@@ -74,6 +68,7 @@ namespace BudgetMilestones
                     "Removes the <cash bonus only> from milestone rewards.\n" +
                     "Milestone unlocks and other progression rewards still apply.\n" +
                     "Affects the selected starting milestone and milestones reached later.\n" +
+                    "Changes take effect immediately - no restart needed.\n" +
                     "Turning this OFF restores cash rewards for future milestones; money already received or skipped is not changed."
                 },
 
@@ -105,9 +100,9 @@ namespace BudgetMilestones
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)), "Network Demolition Cost" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)),
-                    "Charges this percentage of the network's current construction cost when bulldozing roads, paths, rail, pipes, cables, and other network segments.\n" +
+                    "Charges this percentage of construction cost when bulldozing roads, paths, rail, pipes, cables, and other network segments.\n" +
                     "<0% = vanilla: no added demolition charge.>\n" +
-                    "Uses the game's network construction-cost calculation, including length and elevation."
+                    "<Warning: 50% can drain your budget fast.> Players are used to free demolition, so keep an eye on your cash."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.AddMoneyKeyboardBinding)), "Add Money" },

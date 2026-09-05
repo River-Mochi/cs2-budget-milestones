@@ -2,56 +2,36 @@
 <!--Id must be set in order to update existing mod. Leave blank for first publish.-->
 <ModId Value="" />
 <DisplayName Value="Budget + Milestones" />
-<ShortDescription Value="Custom city starting budget and milestones, add automatic budget support, and Convert Unlimited Money saves to normal." />
+<ShortDescription Value="Customize starting money and milestones, add simple budget tools, and optionally charge network demolition costs." />
 <LongDescription>
 ### Budget + Milestones
 
-Custom City Start progression and budget options.
-Make it harder or easier to start a new city or maintain a city if you get in deep water.
+Set up your city the way you want — normal start, harder start, or a quick head start.
 
 #### City Start
-- Choose the starting money balance for the next loaded limited-money city.
-- Choose a higher milestone to unlock when the next city loads.
-- Choose if Milestone reward money is disabled or game default amounts.
-- Milestone rewards use the game's own milestone values and unlock events.
-- Add network demolition costs option.
+- Keep normal milestone progression or start at a milestone you choose.
+- Set starting money for the next limited-money city.
+- Keep normal milestone cash rewards or turn the cash bonuses off.
+- Optional network demolition cost from 0% to 50%.
+
+#### Budget Tools
+- Add or subtract a chosen amount with hotkeys.
+- Optional Auto Add Money can keep your balance above a selected threshold.
 
 #### Unlimited Money Converter
-- Convert a city created with Unlimited Money into normal limited-money budgeting.
-- Make a backup save first. The conversion cannot be undone by the mod.
+- Convert an Unlimited Money save to normal limited-money budgeting.
+- Make a backup first. The mod cannot undo the conversion.
 
+**Vanilla-friendly defaults:** no milestone skip, normal milestone rewards, and 0% demolition cost.
 
-#### Budget
-- these budget tools used to be in City Watchdog mod and spun off to this one.
-- Add or subtract a selected amount with hotkeys.
-- Optional Auto add can keep the city above a selected threshold.
-
-#### City Start Options
-- Start city with any Milestone. Trains now! Set Initial money if you want Less for a challenge or more.
-- Quick handy info: hover over bottom menu money or population tooltips for instant info chart (faster than opening game's Info view).
-- Convert saves from Unlimited Money type to normal Limited Money.
-
-**Hotkeys**
-- Shift+N = open/close panel (same as clicking on Top Left icon).
-- N    = show/hide problem alert icons (same as clicking Show/Hide Icons button).
-- [    = Add Money, hold to repeat.
-- ]    = Subtract Money, hold to repeat.
-
-
-### Important Notes
-- Unlimited Money save: make a backup before converting the save. Mod cannot undo that conversion. Check mod's "show instructions".
-- No Harmony patch used; safer more reliable for patch days.
-
-### Credits and thanks to supporters and testers
-River-Mochi, mod author
-
-
+No Harmony patch.
 </LongDescription>
 <Tag Value="Code Mod" />
-<ModVersion Value="0.5.0" />
+<ModVersion Value="1.0.0" />
 <GameVersion Value="1.6.*" />
 <ChangeLog>
 - Initial release.
 </ChangeLog>
 <ExternalLink Type="github" Url="https://github.com/River-Mochi/cs2-budget-milestones" />
+<ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
 </Publish>

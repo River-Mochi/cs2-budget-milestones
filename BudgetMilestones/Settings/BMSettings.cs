@@ -55,7 +55,7 @@ namespace BudgetMilestones
         public const string AddMoneyAction = nameof(AddMoneyAction);
         public const string SubtractMoneyAction = nameof(SubtractMoneyAction);
 
-        private const int kMilestoneTinyVillage = 0;
+        private const int kMilestoneGameDefault = -1;
         private const string kAboutLinksRow = "AboutLinksRow";
 
         private const string kUrlParadox =
@@ -99,13 +99,9 @@ namespace BudgetMilestones
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(IsInGame))]
         public int InitialMoney { get; set; }
 
-        [SettingsUISection(kCityStart, kCityStartGroup)]
-        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(CannotEnableCustomMilestoneInGame))]
-        public bool CustomMilestone { get; set; }
-
         [SettingsUIDropdown(typeof(BMSettings), nameof(GetMilestoneLevelItems))]
         [SettingsUISection(kCityStart, kCityStartGroup)]
-        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(GetMilestoneLevelStatus))]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(IsInGame))]
         public int MilestoneLevel { get; set; }
 
         [SettingsUISection(kCityStart, kCityStartGroup)]
@@ -129,7 +125,7 @@ namespace BudgetMilestones
         public int AutomaticAddMoneyAmount { get; set; }
 
         [SettingsUISlider(min = 0, max = 50, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUISection(kCityStart, kBudgetGroup)]
+        [SettingsUISection(kCityStart, kCityStartGroup)]
         public int NetworkDemolitionCostPercent { get; set; }
 
         [SettingsUISection(kCityStart, kSaveConversion)]
@@ -222,19 +218,9 @@ namespace BudgetMilestones
                    GameManager.instance.gameMode == GameMode.Game;
         }
 
-        private bool CannotEnableCustomMilestoneInGame()
-        {
-            return IsInGame() && !CustomMilestone;
-        }
-
         public bool EnsureAutomaticAddMoneyEnabled()
         {
             return !AutomaticAddMoney;
-        }
-
-        private bool GetMilestoneLevelStatus()
-        {
-            return IsInGame() || !CustomMilestone;
         }
 
         private bool CannotConvertUnlimitedMoneySave()
@@ -304,9 +290,17 @@ namespace BudgetMilestones
             };
         }
 
-        private static DropdownItem<int>[] GetMilestoneLevelItems()
+        private DropdownItem<int>[] GetMilestoneLevelItems()
         {
-            List<DropdownItem<int>> items = new();
+            List<DropdownItem<int>> items = new()
+            {
+                new DropdownItem<int>
+                {
+                    value = kMilestoneGameDefault,
+                    displayName = GetOptionLocaleID("NoExtraMilestone"),
+                },
+            };
+
             for (int i = 0; i < s_Milestones.Length; i++)
             {
                 items.Add(
@@ -337,9 +331,8 @@ namespace BudgetMilestones
             AutomaticAddMoneyAmount = 10000;
             NetworkDemolitionCostPercent = 0;
             InitialMoney = 0;
-            CustomMilestone = false;
             DisableMilestoneMoneyRewards = false;
-            MilestoneLevel = kMilestoneTinyVillage;
+            MilestoneLevel = kMilestoneGameDefault;
             ConfirmUnlimitedMoneySaveConversion = false;
         }
 
@@ -350,7 +343,10 @@ namespace BudgetMilestones
                 ManualMoneyAmount = 40000;
             }
 
-            MilestoneLevel = Math.Clamp(MilestoneLevel, 0, s_Milestones.Length - 1);
+            MilestoneLevel = Math.Clamp(
+                MilestoneLevel,
+                kMilestoneGameDefault,
+                s_Milestones.Length - 1);
             NetworkDemolitionCostPercent = Math.Clamp(NetworkDemolitionCostPercent, 0, 50);
 
             if (InitialMoney < 0)

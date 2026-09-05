@@ -245,7 +245,7 @@ namespace BudgetMilestones.Systems
 
         private void ApplyConfiguredMilestone()
         {
-            if (!BMSettings.Instance.CustomMilestone)
+            if (BMSettings.Instance.MilestoneLevel < 0)
             {
                 return;
             }
