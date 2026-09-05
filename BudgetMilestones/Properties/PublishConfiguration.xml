@@ -2,29 +2,35 @@
 <!--Id must be set in order to update existing mod. Leave blank for first publish.-->
 <ModId Value="" />
 <DisplayName Value="Budget + Milestones" />
-<ShortDescription Value="Customize city starting budget and milestones, add automatic budget support, and convert Unlimited Money saves." />
+<ShortDescription Value="Custom city starting budget and milestones, add automatic budget support, and Convert Unlimited Money saves to normal." />
 <LongDescription>
 ### Budget + Milestones
 
-Customize city-start progression and budget without changing City Watchdog's visual/HUD features.
+Custom City Start progression and budget options.
+Make it harder or easier to start a new city or maintain a city if you get in deep water.
 
 #### City Start
 - Choose the starting money balance for the next loaded limited-money city.
 - Choose a higher milestone to unlock when the next city loads.
+- Choose if Milestone reward money is disabled or game default amounts.
 - Milestone rewards use the game's own milestone values and unlock events.
-
-#### Budget
-- Add or subtract a selected amount with hotkeys.
-- Optional Automatic Add Money can keep the city above a selected threshold.
 
 #### Unlimited Money Converter
 - Convert a city created with Unlimited Money into normal limited-money budgeting.
 - Make a backup save first. The conversion cannot be undone by the mod.
 
+
+#### Budget
+- these tools used to be in City Watchdog mod and spun off to this one.
+- Add or subtract a selected amount with hotkeys.
+- Optional Auto add can keep the city above a selected threshold.
+
+
+
 No Harmony patch.
 </LongDescription>
 <Tag Value="Code Mod" />
-<ModVersion Value="1.0.0" />
+<ModVersion Value="0.5.0" />
 <GameVersion Value="1.6.*" />
 <ChangeLog>
 - Initial release.

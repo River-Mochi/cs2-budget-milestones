@@ -29,34 +29,28 @@ namespace BudgetMilestones
             Dictionary<string, int> indexCounts)
         {
             string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
 
             Dictionary<string, string> entries = new()
             {
                 { m_Settings.GetSettingsLocaleID(), title },
 
-                // Tabs
                 { m_Settings.GetOptionTabLocaleID(BMSettings.kCityStart), "City Start" },
                 { m_Settings.GetOptionTabLocaleID(BMSettings.kHotkeys), "Key Bindings" },
                 { m_Settings.GetOptionTabLocaleID(BMSettings.kAbout), "About" },
 
-                // Groups
                 { m_Settings.GetOptionGroupLocaleID(BMSettings.kCityStartGroup), "CITY START SETTINGS" },
                 { m_Settings.GetOptionGroupLocaleID(BMSettings.kBudgetGroup), "BUDGET" },
                 { m_Settings.GetOptionGroupLocaleID(BMSettings.kSaveConversion), "CONVERT UNLIMITED SAVE" },
                 { m_Settings.GetOptionGroupLocaleID(BMSettings.kAboutInfo), "" },
+                { m_Settings.GetOptionGroupLocaleID(BMSettings.kAboutLinks), "" },
                 { m_Settings.GetOptionGroupLocaleID(BMSettings.kAboutDiagnostics), "DIAGNOSTICS" },
 
-                // City Start
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.InitialMoney)), "Initial Start Money" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.InitialMoney)),
-                    "Sets the balance for the next loaded <limited-money> city — new or existing.\n" +
+                    "Sets the starting balance for the next loaded <limited-money> city — new or existing.\n" +
                     "After it applies once, this setting resets to Game Default.\n" +
-                    "This is grayed out once a city is already loaded.\n" +
-                    "Set it before loading or starting the city. Afterward, use <Money Hotkey Amount> if needed."
+                    "If Milestone Selector jumps to a higher milestone, normal milestone cash rewards are added afterward, so the final balance will be higher.\n" +
+                    "Enable <Disable Milestone Money Rewards> if you want to skip those cash bonuses."
                 },
                 { m_Settings.GetOptionLocaleID("GameDefault"), "Game Default" },
 
@@ -75,7 +69,14 @@ namespace BudgetMilestones
                     "If the city is already at or past the selected milestone, nothing happens."
                 },
 
-                // Budget
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.DisableMilestoneMoneyRewards)), "Disable Milestone Money Rewards" },
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.DisableMilestoneMoneyRewards)),
+                    "Removes the <cash bonus only> from milestone rewards.\n" +
+                    "Milestone unlocks and other progression rewards still apply.\n" +
+                    "Affects the selected starting milestone and milestones reached later.\n" +
+                    "Turning this OFF restores cash rewards for future milestones; money already received or skipped is not changed."
+                },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ManualMoneyAmount)), "Money Hotkey Amount" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ManualMoneyAmount)),
                     "Use this amount with the Add Money and Subtract Money hotkeys.\n" +
@@ -102,7 +103,13 @@ namespace BudgetMilestones
                     "If more is needed to reach the threshold, Budget + Milestones adds the larger amount."
                 },
 
-                // Key Bindings
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)), "Network Demolition Cost" },
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)),
+                    "Charges this percentage of the network's current construction cost when bulldozing roads, paths, rail, pipes, cables, and other network segments.\n" +
+                    "<0% = vanilla: no added demolition charge.>\n" +
+                    "Uses the game's network construction-cost calculation, including length and elevation."
+                },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.AddMoneyKeyboardBinding)), "Add Money" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.AddMoneyKeyboardBinding)), "Hotkey to <Add Money> inside the city." },
                 { m_Settings.GetBindingKeyLocaleID(BMSettings.AddMoneyAction), "Add Money" },
@@ -111,7 +118,6 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.SubtractMoneyKeyboardBinding)), "Hotkey to <Subtract Money> inside the city." },
                 { m_Settings.GetBindingKeyLocaleID(BMSettings.SubtractMoneyAction), "Subtract Money" },
 
-                // Unlimited Money Converter
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ConfirmUnlimitedMoneySaveConversion)), "Unlimited Money Converter" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ConfirmUnlimitedMoneySaveConversion)),
                     "<Make a Backup of city FIRST>.\n" +
@@ -133,12 +139,17 @@ namespace BudgetMilestones
                     "Are you sure?"
                 },
 
-                // About
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NameText)), "Mod name" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NameText)), "Display name of this mod." },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.VersionText)), "Version" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.VersionText)), "Current mod version." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.OpenParadox)), "Open River-Mochi's Paradox Mods page." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenDiscord)), "Discord" },
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.OpenDiscord)), "Open the Discord support server." },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenLog)), "Open Log" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.OpenLog)),

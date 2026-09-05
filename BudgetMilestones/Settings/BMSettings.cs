@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Settings/BMSettings.cs
-// Purpose: Budget, milestone, hotkey, and Unlimited Money conversion settings.
+// Purpose: Budget, milestone, hotkey, demolition-cost, and Unlimited Money conversion settings.
 
 namespace BudgetMilestones
 {
@@ -30,9 +30,11 @@ namespace BudgetMilestones
 
     using Unity.Entities;
 
+    using UnityEngine;
+
     [FileLocation("ModsSettings/BudgetMilestones/BudgetMilestones")]
     [SettingsUITabOrder(kCityStart, kHotkeys, kAbout)]
-    [SettingsUIGroupOrder(kCityStartGroup, kBudgetGroup, kSaveConversion, kHotkeyGroup, kAboutInfo, kAboutDiagnostics)]
+    [SettingsUIGroupOrder(kCityStartGroup, kBudgetGroup, kSaveConversion, kHotkeyGroup, kAboutInfo, kAboutLinks, kAboutDiagnostics)]
     [SettingsUIShowGroupName(kCityStartGroup, kBudgetGroup, kSaveConversion, kAboutDiagnostics)]
     public sealed class BMSettings : ModSetting
     {
@@ -47,12 +49,20 @@ namespace BudgetMilestones
         internal const string kSaveConversion = "SaveConversion";
         internal const string kHotkeyGroup = "BudgetHotkeys";
         internal const string kAboutInfo = "AboutInfo";
+        internal const string kAboutLinks = "AboutLinks";
         internal const string kAboutDiagnostics = "AboutDiagnostics";
 
         public const string AddMoneyAction = nameof(AddMoneyAction);
         public const string SubtractMoneyAction = nameof(SubtractMoneyAction);
 
         private const int kMilestoneTinyVillage = 0;
+        private const string kAboutLinksRow = "AboutLinksRow";
+
+        private const string kUrlParadox =
+            "https://mods.paradoxplaza.com/authors/River-mochi/cities_skylines_2?games=cities_skylines_2&orderBy=desc&sortBy=best&time=alltime";
+
+        private const string kUrlDiscord =
+            "https://discord.gg/gwXgvtyhjc";
 
         private static readonly string[] s_Milestones =
         {
@@ -98,6 +108,9 @@ namespace BudgetMilestones
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(GetMilestoneLevelStatus))]
         public int MilestoneLevel { get; set; }
 
+        [SettingsUISection(kCityStart, kCityStartGroup)]
+        public bool DisableMilestoneMoneyRewards { get; set; }
+
         [SettingsUISlider(min = 20000, max = 2000000, step = 20000, scalarMultiplier = 1, unit = Unit.kInteger)]
         [SettingsUISection(kCityStart, kBudgetGroup)]
         public int ManualMoneyAmount { get; set; }
@@ -114,6 +127,10 @@ namespace BudgetMilestones
         [SettingsUISection(kCityStart, kBudgetGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(EnsureAutomaticAddMoneyEnabled))]
         public int AutomaticAddMoneyAmount { get; set; }
+
+        [SettingsUISlider(min = 0, max = 50, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISection(kCityStart, kBudgetGroup)]
+        public int NetworkDemolitionCostPercent { get; set; }
 
         [SettingsUISection(kCityStart, kSaveConversion)]
         public bool ConfirmUnlimitedMoneySaveConversion { get; set; }
@@ -157,6 +174,34 @@ namespace BudgetMilestones
 #else
             Mod.ModVersion;
 #endif
+
+        [SettingsUIButtonGroup(kAboutLinksRow)]
+        [SettingsUIButton]
+        [SettingsUISection(kAbout, kAboutLinks)]
+        public bool OpenParadox
+        {
+            set
+            {
+                if (value)
+                {
+                    TryOpenUrl(kUrlParadox);
+                }
+            }
+        }
+
+        [SettingsUIButtonGroup(kAboutLinksRow)]
+        [SettingsUIButton]
+        [SettingsUISection(kAbout, kAboutLinks)]
+        public bool OpenDiscord
+        {
+            set
+            {
+                if (value)
+                {
+                    TryOpenUrl(kUrlDiscord);
+                }
+            }
+        }
 
         [SettingsUIButton]
         [SettingsUISection(kAbout, kAboutDiagnostics)]
@@ -202,6 +247,21 @@ namespace BudgetMilestones
         {
             return World.DefaultGameObjectInjectionWorld?
                 .GetExistingSystemManaged<CityFinanceSystem>();
+        }
+
+        private static void TryOpenUrl(string url)
+        {
+            try
+            {
+                Application.OpenURL(url);
+            }
+            catch (Exception ex)
+            {
+                LogUtils.WarnOnce(
+                    "open-url-" + url,
+                    () => $"Failed to open URL '{url}': {ex.GetType().Name}: {ex.Message}",
+                    ex);
+            }
         }
 
         public DropdownItem<int>[] GetAutomaticAddMoneyThresholdItems()
@@ -275,8 +335,10 @@ namespace BudgetMilestones
             AutomaticAddMoney = false;
             AutomaticAddMoneyThreshold = 100000;
             AutomaticAddMoneyAmount = 10000;
+            NetworkDemolitionCostPercent = 0;
             InitialMoney = 0;
             CustomMilestone = false;
+            DisableMilestoneMoneyRewards = false;
             MilestoneLevel = kMilestoneTinyVillage;
             ConfirmUnlimitedMoneySaveConversion = false;
         }
@@ -289,6 +351,7 @@ namespace BudgetMilestones
             }
 
             MilestoneLevel = Math.Clamp(MilestoneLevel, 0, s_Milestones.Length - 1);
+            NetworkDemolitionCostPercent = Math.Clamp(NetworkDemolitionCostPercent, 0, 50);
 
             if (InitialMoney < 0)
             {

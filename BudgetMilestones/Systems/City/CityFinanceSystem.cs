@@ -6,29 +6,30 @@
 // all copies or substantial portions of this code.
 // ================= </copyright> ======================
 
-// File: Systems/CityFinanceSystem.cs
+// File: Systems/City/CityFinanceSystem.cs
 // Purpose: Handles Budget + Milestones money actions, initial money, and automatic money support.
 
 namespace BudgetMilestones.Systems
 {
     using System;
     using System.Reflection;
+
     using Colossal.Serialization.Entities;
+
     using CS2Shared.RiverMochi;
+
     using Game;
     using Game.City;
     using Game.Input;
     using Game.SceneFlow;
     using Game.Simulation;
+
     using Unity.Entities;
 
     public partial class CityFinanceSystem : GameSystemBaseExtension
     {
-        // Counts this system's OnUpdate passes. Higher = automatic money checks less often.
         private const int kAutomaticMoneyCheckIntervalUpdates = 128;
-        // Hold-to-repeat delay for [ and ]. Higher = easier single-taps before repeat begins.
         private const int kManualMoneyRepeatInitialDelayUpdates = 20;
-        // Hold-to-repeat speed for [ and ] after the delay. Lower = faster repeated money changes.
         private const int kManualMoneyRepeatIntervalUpdates = 9;
 
         private CitySystem m_CitySystem = null!;
@@ -45,7 +46,7 @@ namespace BudgetMilestones.Systems
             ManualAdd,
             AutoSubtract,
             ManualSubtract,
-            None
+            None,
         }
 
         public void SetUnlimitedMoneyToLimitedMoney()
@@ -96,6 +97,7 @@ namespace BudgetMilestones.Systems
             FieldInfo? loadedUnlimitedMoneyField = typeof(CityConfigurationSystem).GetField(
                 "m_LoadedUnlimitedMoney",
                 BindingFlags.NonPublic | BindingFlags.Instance);
+
             if (loadedUnlimitedMoneyField == null)
             {
                 return;
@@ -162,20 +164,33 @@ namespace BudgetMilestones.Systems
 
             m_AutomaticMoneyCheckCooldown = 0;
 
-            if ((serializationContext.purpose == Purpose.NewGame || serializationContext.purpose == Purpose.LoadGame) &&
+            if ((serializationContext.purpose == Purpose.NewGame ||
+                 serializationContext.purpose == Purpose.LoadGame) &&
                 BMSettings.Instance.InitialMoney != 0)
             {
-                if (!TryGetPlayerMoney(out PlayerMoney playerMoney))
+                if (!TryGetPlayerMoney(out PlayerMoney playerMoney) ||
+                    playerMoney.m_Unlimited)
                 {
                     return;
                 }
 
-                if (!playerMoney.m_Unlimited)
-                {
-                    ApplyMoneyChange(FinanceActionKind.AutoSubtract, playerMoney.money);
-                    ApplyMoneyChange(FinanceActionKind.AutoAdd, BMSettings.Instance.InitialMoney);
-                    BMSettings.Instance.ResetInitialMoney();
-                }
+                int selectedStartMoney = BMSettings.Instance.InitialMoney;
+
+                // Apply the selected base balance first. If the custom milestone system
+                // then skips milestones, normal milestone cash rewards are added afterward
+                // unless Disable Milestone Money Rewards is enabled.
+                ApplyMoneyChange(
+                    FinanceActionKind.AutoSubtract,
+                    playerMoney.money);
+
+                ApplyMoneyChange(
+                    FinanceActionKind.AutoAdd,
+                    selectedStartMoney);
+
+                BMSettings.Instance.ResetInitialMoney();
+
+                LogUtils.Info(() =>
+                    $"Initial start money applied: {selectedStartMoney:N0}");
             }
         }
 
@@ -194,11 +209,21 @@ namespace BudgetMilestones.Systems
 
         private void UpdateManualMoneyHotkeys()
         {
-            UpdateManualMoneyHotkey(m_AddMoneyAction, FinanceActionKind.ManualAdd, ref m_AddMoneyRepeatCooldown);
-            UpdateManualMoneyHotkey(m_SubtractMoneyAction, FinanceActionKind.ManualSubtract, ref m_SubtractMoneyRepeatCooldown);
+            UpdateManualMoneyHotkey(
+                m_AddMoneyAction,
+                FinanceActionKind.ManualAdd,
+                ref m_AddMoneyRepeatCooldown);
+
+            UpdateManualMoneyHotkey(
+                m_SubtractMoneyAction,
+                FinanceActionKind.ManualSubtract,
+                ref m_SubtractMoneyRepeatCooldown);
         }
 
-        private void UpdateManualMoneyHotkey(ProxyAction? action, FinanceActionKind financeActionKind, ref int repeatCooldown)
+        private void UpdateManualMoneyHotkey(
+            ProxyAction? action,
+            FinanceActionKind financeActionKind,
+            ref int repeatCooldown)
         {
             if (action == null)
             {
@@ -206,7 +231,6 @@ namespace BudgetMilestones.Systems
                 return;
             }
 
-            // First press always applies once; held keys repeat only after the delay above.
             if (action.WasPressedThisFrame())
             {
                 ApplyMoneyChange(financeActionKind, BMSettings.Instance.ManualMoneyAmount);
@@ -256,12 +280,8 @@ namespace BudgetMilestones.Systems
 
         private void TryAutomaticAddMoney()
         {
-            if (!TryGetPlayerMoney(out PlayerMoney playerMoney))
-            {
-                return;
-            }
-
-            if (playerMoney.m_Unlimited)
+            if (!TryGetPlayerMoney(out PlayerMoney playerMoney) ||
+                playerMoney.m_Unlimited)
             {
                 return;
             }
@@ -285,7 +305,10 @@ namespace BudgetMilestones.Systems
             ApplyMoneyChange(FinanceActionKind.AutoAdd, amount);
         }
 
-        private static int GetAutomaticAddMoneyAmount(int currentMoney, int threshold, int selectedAmount)
+        private static int GetAutomaticAddMoneyAmount(
+            int currentMoney,
+            int threshold,
+            int selectedAmount)
         {
             long deficit = (long)threshold - currentMoney;
             long requestedAmount = Math.Max(0, selectedAmount);
@@ -310,12 +333,13 @@ namespace BudgetMilestones.Systems
             {
                 return BMSettings.Instance.GetAction(actionName);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 LogUtils.WarnOnce(
                     "missing-keybind-" + actionName,
                     () => $"Keybinding action '{actionName}' is unavailable: {ex.GetType().Name}: {ex.Message}",
                     ex);
+
                 return null;
             }
         }
@@ -350,11 +374,13 @@ namespace BudgetMilestones.Systems
                 return;
             }
 
-            if (financeActionKind == FinanceActionKind.AutoAdd || financeActionKind == FinanceActionKind.ManualAdd)
+            if (financeActionKind == FinanceActionKind.AutoAdd ||
+                financeActionKind == FinanceActionKind.ManualAdd)
             {
                 playerMoney.Add(money);
             }
-            else if (financeActionKind == FinanceActionKind.AutoSubtract || financeActionKind == FinanceActionKind.ManualSubtract)
+            else if (financeActionKind == FinanceActionKind.AutoSubtract ||
+                     financeActionKind == FinanceActionKind.ManualSubtract)
             {
                 playerMoney.Subtract(money);
             }

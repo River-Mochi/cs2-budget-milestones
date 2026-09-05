@@ -7,26 +7,35 @@
 // ================= </copyright> ======================
 
 // File: Systems/City/MilestoneSystem.cs
-// Purpose: Applies the custom milestone setting to new or loaded cities.
+// Purpose: Applies the custom milestone setting and optional milestone cash-reward suppression.
 
 namespace BudgetMilestones.Systems
 {
+    using System.Collections.Generic;
+
     using Colossal.Serialization.Entities;
+
     using CS2Shared.RiverMochi;
+
     using Game.City;
     using Game.Common;
     using Game.Prefabs;
     using Game.Simulation;
+
     using Unity.Collections;
     using Unity.Entities;
     using Unity.Mathematics;
 
     public partial class MilestoneSystem : GameSystemBaseExtension
     {
+        private readonly Dictionary<int, int> m_OriginalMoneyRewards = new();
+
         private EntityArchetype m_UnlockEventArchetype;
         private EntityQuery m_MilestoneLevelGroup;
         private EntityQuery m_MilestoneGroup;
         private CitySystem m_CitySystem = null!;
+        private bool m_HasCachedMoneyRewards;
+        private bool m_AppliedDisableMoneyRewards;
 
         protected override void OnCreate()
         {
@@ -35,7 +44,6 @@ namespace BudgetMilestones.Systems
             m_CitySystem =
                 World.GetOrCreateSystemManaged<CitySystem>();
 
-            // Use vanilla Unlock events so milestone rewards and side effects stay game-native.
             m_UnlockEventArchetype =
                 EntityManager.CreateArchetype(
                     new ComponentType[]
@@ -62,15 +70,177 @@ namespace BudgetMilestones.Systems
             RequireForUpdate(m_MilestoneGroup);
         }
 
+        protected override void OnDestroy()
+        {
+            RestoreMilestoneMoneyRewards();
+            base.OnDestroy();
+        }
+
         protected override void OnGameLoaded(
             Context serializationContext)
         {
             base.OnGameLoaded(serializationContext);
 
+            // If this world already had cached values, restore them before taking a fresh
+            // snapshot for the newly loaded city.
+            RestoreMilestoneMoneyRewards();
+            CacheMilestoneMoneyRewards();
+            ApplyMilestoneMoneyRewardSetting(force: true);
+
             if (InGame)
             {
                 ApplyConfiguredMilestone();
             }
+        }
+
+        protected override void OnUpdate()
+        {
+            if (!InGame || !m_HasCachedMoneyRewards)
+            {
+                return;
+            }
+
+            ApplyMilestoneMoneyRewardSetting(force: false);
+        }
+
+        private void CacheMilestoneMoneyRewards()
+        {
+            m_OriginalMoneyRewards.Clear();
+
+            NativeArray<MilestoneData> milestoneData =
+                m_MilestoneGroup.ToComponentDataArray<MilestoneData>(
+                    Allocator.Temp);
+
+            try
+            {
+                for (int i = 0; i < milestoneData.Length; i++)
+                {
+                    MilestoneData milestone = milestoneData[i];
+                    m_OriginalMoneyRewards[milestone.m_Index] = milestone.m_Reward;
+                }
+
+                m_HasCachedMoneyRewards = milestoneData.Length > 0;
+            }
+            finally
+            {
+                milestoneData.Dispose();
+            }
+        }
+
+        private void ApplyMilestoneMoneyRewardSetting(bool force)
+        {
+            if (!m_HasCachedMoneyRewards)
+            {
+                return;
+            }
+
+            bool disable = BMSettings.Instance.DisableMilestoneMoneyRewards;
+            if (!force && disable == m_AppliedDisableMoneyRewards)
+            {
+                return;
+            }
+
+            NativeArray<Entity> milestoneEntities =
+                m_MilestoneGroup.ToEntityArray(Allocator.Temp);
+
+            NativeArray<MilestoneData> milestoneData =
+                m_MilestoneGroup.ToComponentDataArray<MilestoneData>(
+                    Allocator.Temp);
+
+            try
+            {
+                for (int i = 0; i < milestoneData.Length; i++)
+                {
+                    MilestoneData milestone = milestoneData[i];
+                    if (!m_OriginalMoneyRewards.TryGetValue(
+                            milestone.m_Index,
+                            out int originalReward))
+                    {
+                        continue;
+                    }
+
+                    int desiredReward = disable ? 0 : originalReward;
+                    if (milestone.m_Reward == desiredReward)
+                    {
+                        continue;
+                    }
+
+                    milestone.m_Reward = desiredReward;
+                    EntityManager.SetComponentData(
+                        milestoneEntities[i],
+                        milestone);
+
+                    if (!EntityManager.HasComponent<BatchesUpdated>(
+                            milestoneEntities[i]))
+                    {
+                        EntityManager.AddComponent<BatchesUpdated>(
+                            milestoneEntities[i]);
+                    }
+                }
+            }
+            finally
+            {
+                milestoneEntities.Dispose();
+                milestoneData.Dispose();
+            }
+
+            m_AppliedDisableMoneyRewards = disable;
+
+            LogUtils.Info(() =>
+                disable
+                    ? "Milestone money rewards disabled."
+                    : "Milestone money rewards restored.");
+        }
+
+        private void RestoreMilestoneMoneyRewards()
+        {
+            if (!m_HasCachedMoneyRewards)
+            {
+                return;
+            }
+
+            NativeArray<Entity> milestoneEntities =
+                m_MilestoneGroup.ToEntityArray(Allocator.Temp);
+
+            NativeArray<MilestoneData> milestoneData =
+                m_MilestoneGroup.ToComponentDataArray<MilestoneData>(
+                    Allocator.Temp);
+
+            try
+            {
+                for (int i = 0; i < milestoneData.Length; i++)
+                {
+                    MilestoneData milestone = milestoneData[i];
+                    if (!m_OriginalMoneyRewards.TryGetValue(
+                            milestone.m_Index,
+                            out int originalReward) ||
+                        milestone.m_Reward == originalReward)
+                    {
+                        continue;
+                    }
+
+                    milestone.m_Reward = originalReward;
+                    EntityManager.SetComponentData(
+                        milestoneEntities[i],
+                        milestone);
+
+                    if (!EntityManager.HasComponent<BatchesUpdated>(
+                            milestoneEntities[i]))
+                    {
+                        EntityManager.AddComponent<BatchesUpdated>(
+                            milestoneEntities[i]);
+                    }
+                }
+            }
+            finally
+            {
+                milestoneEntities.Dispose();
+                milestoneData.Dispose();
+            }
+
+            m_OriginalMoneyRewards.Clear();
+            m_HasCachedMoneyRewards = false;
+            m_AppliedDisableMoneyRewards = false;
         }
 
         private void ApplyConfiguredMilestone()
@@ -118,7 +288,6 @@ namespace BudgetMilestones.Systems
                     EntityManager.GetComponentData<XP>(
                         m_CitySystem.City);
 
-                // Apply every skipped milestone so jumping several levels keeps rewards consistent.
                 for (int i = milestoneLevel.m_AchievedMilestone;
                      i < targetMilestone;
                      i++)
@@ -212,6 +381,7 @@ namespace BudgetMilestones.Systems
             ref DevTreePoints devTreePoints,
             ref XP xp)
         {
+            // m_Reward is zero while Disable Milestone Money Rewards is enabled.
             playerMoney.Add(
                 milestoneData.m_Reward);
 
