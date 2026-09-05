@@ -66,20 +66,6 @@ namespace BudgetMilestones
                 if (manager != null)
                 {
                     manager.AddSource("en-US", new LocaleEN(setting));
-                   // manager.AddSource("fr-FR", new LocaleFR(setting));
-                  //  manager.AddSource("es-ES", new LocaleES(setting));
-                 //   manager.AddSource("de-DE", new LocaleDE(setting));
-                //    manager.AddSource("it-IT", new LocaleIT(setting));
-                //    manager.AddSource("ja-JP", new LocaleJA(setting));
-                //    manager.AddSource("ko-KR", new LocaleKO(setting));
-                //    manager.AddSource("pl-PL", new LocalePL(setting));
-               //     manager.AddSource("pt-BR", new LocalePT_BR(setting));
-               //     manager.AddSource("pt-PT", new LocalePT_PT(setting));
-               //     manager.AddSource("zh-HANS", new LocaleZH_HANS(setting));
-               //     manager.AddSource("zh-HANT", new LocaleZH_HANT(setting));
-              //      manager.AddSource("th-TH", new LocaleTH(setting));
-              //      manager.AddSource("vi-VN", new LocaleVI(setting));
-              //      manager.AddSource("tr-TR", new LocaleTR(setting));
                 }
             }
             catch (Exception ex)

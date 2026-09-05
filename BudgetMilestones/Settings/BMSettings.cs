@@ -31,18 +31,18 @@ namespace BudgetMilestones
     using Unity.Entities;
 
     [FileLocation("ModsSettings/BudgetMilestones/BudgetMilestones")]
-    [SettingsUITabOrder(kMainTab, kHotkeys, kAbout)]
+    [SettingsUITabOrder(kCityStart, kHotkeys, kAbout)]
     [SettingsUIGroupOrder(kCityStartGroup, kBudgetGroup, kSaveConversion, kHotkeyGroup, kAboutInfo, kAboutDiagnostics)]
     [SettingsUIShowGroupName(kCityStartGroup, kBudgetGroup, kSaveConversion, kAboutDiagnostics)]
     public sealed class BMSettings : ModSetting
     {
         internal static BMSettings Instance { get; set; } = null!;
 
-        internal const string kMainTab = "BudgetMilestones";
+        internal const string kCityStart = "CityStart";
         internal const string kHotkeys = "Hotkeys";
         internal const string kAbout = "About";
 
-        internal const string kCityStartGroup = "CityStart";
+        internal const string kCityStartGroup = "CityStartSettings";
         internal const string kBudgetGroup = "Budget";
         internal const string kSaveConversion = "SaveConversion";
         internal const string kHotkeyGroup = "BudgetHotkeys";
@@ -85,42 +85,42 @@ namespace BudgetMilestones
         }
 
         [SettingsUIDropdown(typeof(BMSettings), nameof(GetInitialMoneyItems))]
-        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUISection(kCityStart, kCityStartGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(IsInGame))]
         public int InitialMoney { get; set; }
 
-        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUISection(kCityStart, kCityStartGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(CannotEnableCustomMilestoneInGame))]
         public bool CustomMilestone { get; set; }
 
         [SettingsUIDropdown(typeof(BMSettings), nameof(GetMilestoneLevelItems))]
-        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUISection(kCityStart, kCityStartGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(GetMilestoneLevelStatus))]
         public int MilestoneLevel { get; set; }
 
         [SettingsUISlider(min = 20000, max = 2000000, step = 20000, scalarMultiplier = 1, unit = Unit.kInteger)]
-        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUISection(kCityStart, kBudgetGroup)]
         public int ManualMoneyAmount { get; set; }
 
-        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUISection(kCityStart, kBudgetGroup)]
         public bool AutomaticAddMoney { get; set; }
 
         [SettingsUIDropdown(typeof(BMSettings), nameof(GetAutomaticAddMoneyThresholdItems))]
-        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUISection(kCityStart, kBudgetGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(EnsureAutomaticAddMoneyEnabled))]
         public int AutomaticAddMoneyThreshold { get; set; }
 
         [SettingsUIDropdown(typeof(BMSettings), nameof(GetAutomaticAddMoneyAmountItems))]
-        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUISection(kCityStart, kBudgetGroup)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(EnsureAutomaticAddMoneyEnabled))]
         public int AutomaticAddMoneyAmount { get; set; }
 
-        [SettingsUISection(kMainTab, kSaveConversion)]
+        [SettingsUISection(kCityStart, kSaveConversion)]
         public bool ConfirmUnlimitedMoneySaveConversion { get; set; }
 
         [SettingsUIButton]
         [SettingsUIConfirmation]
-        [SettingsUISection(kMainTab, kSaveConversion)]
+        [SettingsUISection(kCityStart, kSaveConversion)]
         [SettingsUIDisableByCondition(typeof(BMSettings), nameof(CannotConvertUnlimitedMoneySave))]
         public bool ConvertUnlimitedMoneySave
         {
