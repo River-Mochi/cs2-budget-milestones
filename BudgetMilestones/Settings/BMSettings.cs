@@ -1,0 +1,309 @@
+// <copyright file="BMSettings.cs" company="River-Mochi">
+// Copyright (c) 2026 River-Mochi. All rights reserved.
+// Licensed under the MIT License. You may not use this file except in compliance with this License.
+// See LICENSE file in the project root for full license information.
+// This notice and the MIT License notice must be kept with
+// all copies or substantial portions of this code.
+// ================= </copyright> ======================
+
+// File: Settings/BMSettings.cs
+// Purpose: Budget, milestone, hotkey, and Unlimited Money conversion settings.
+
+namespace BudgetMilestones
+{
+    using System;
+    using System.Collections.Generic;
+
+    using BudgetMilestones.Systems;
+
+    using Colossal.IO.AssetDatabase;
+
+    using CS2Shared.RiverMochi;
+
+    using Game;
+    using Game.Input;
+    using Game.Modding;
+    using Game.SceneFlow;
+    using Game.Settings;
+    using Game.UI;
+    using Game.UI.Widgets;
+
+    using Unity.Entities;
+
+    [FileLocation("ModsSettings/BudgetMilestones/BudgetMilestones")]
+    [SettingsUITabOrder(kMainTab, kHotkeys, kAbout)]
+    [SettingsUIGroupOrder(kCityStartGroup, kBudgetGroup, kSaveConversion, kHotkeyGroup, kAboutInfo, kAboutDiagnostics)]
+    [SettingsUIShowGroupName(kCityStartGroup, kBudgetGroup, kSaveConversion, kAboutDiagnostics)]
+    public sealed class BMSettings : ModSetting
+    {
+        internal static BMSettings Instance { get; set; } = null!;
+
+        internal const string kMainTab = "BudgetMilestones";
+        internal const string kHotkeys = "Hotkeys";
+        internal const string kAbout = "About";
+
+        internal const string kCityStartGroup = "CityStart";
+        internal const string kBudgetGroup = "Budget";
+        internal const string kSaveConversion = "SaveConversion";
+        internal const string kHotkeyGroup = "BudgetHotkeys";
+        internal const string kAboutInfo = "AboutInfo";
+        internal const string kAboutDiagnostics = "AboutDiagnostics";
+
+        public const string AddMoneyAction = nameof(AddMoneyAction);
+        public const string SubtractMoneyAction = nameof(SubtractMoneyAction);
+
+        private const int kMilestoneTinyVillage = 0;
+
+        private static readonly string[] s_Milestones =
+        {
+            "TinyVillage",
+            "SmallVillage",
+            "LargeVillage",
+            "GrandVillage",
+            "TinyTown",
+            "BoomTown",
+            "BusyTown",
+            "BigTown",
+            "GreatTown",
+            "SmallCity",
+            "BigCity",
+            "LargeCity",
+            "HugeCity",
+            "GrandCity",
+            "Metropolis",
+            "ThrivingMetropolis",
+            "FlourishingMetropolis",
+            "ExpansiveMetropolis",
+            "MassiveMetropolis",
+            "Megalopolis",
+        };
+
+        public BMSettings(IMod mod)
+            : base(mod)
+        {
+            SetDefaults();
+        }
+
+        [SettingsUIDropdown(typeof(BMSettings), nameof(GetInitialMoneyItems))]
+        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(IsInGame))]
+        public int InitialMoney { get; set; }
+
+        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(CannotEnableCustomMilestoneInGame))]
+        public bool CustomMilestone { get; set; }
+
+        [SettingsUIDropdown(typeof(BMSettings), nameof(GetMilestoneLevelItems))]
+        [SettingsUISection(kMainTab, kCityStartGroup)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(GetMilestoneLevelStatus))]
+        public int MilestoneLevel { get; set; }
+
+        [SettingsUISlider(min = 20000, max = 2000000, step = 20000, scalarMultiplier = 1, unit = Unit.kInteger)]
+        [SettingsUISection(kMainTab, kBudgetGroup)]
+        public int ManualMoneyAmount { get; set; }
+
+        [SettingsUISection(kMainTab, kBudgetGroup)]
+        public bool AutomaticAddMoney { get; set; }
+
+        [SettingsUIDropdown(typeof(BMSettings), nameof(GetAutomaticAddMoneyThresholdItems))]
+        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(EnsureAutomaticAddMoneyEnabled))]
+        public int AutomaticAddMoneyThreshold { get; set; }
+
+        [SettingsUIDropdown(typeof(BMSettings), nameof(GetAutomaticAddMoneyAmountItems))]
+        [SettingsUISection(kMainTab, kBudgetGroup)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(EnsureAutomaticAddMoneyEnabled))]
+        public int AutomaticAddMoneyAmount { get; set; }
+
+        [SettingsUISection(kMainTab, kSaveConversion)]
+        public bool ConfirmUnlimitedMoneySaveConversion { get; set; }
+
+        [SettingsUIButton]
+        [SettingsUIConfirmation]
+        [SettingsUISection(kMainTab, kSaveConversion)]
+        [SettingsUIDisableByCondition(typeof(BMSettings), nameof(CannotConvertUnlimitedMoneySave))]
+        public bool ConvertUnlimitedMoneySave
+        {
+            set
+            {
+                if (!value)
+                {
+                    return;
+                }
+
+                CityFinanceSystem? financeSystem = GetCityFinanceSystem();
+                if (financeSystem?.CanConvertUnlimitedMoneySave() == true)
+                {
+                    financeSystem.SetUnlimitedMoneyToLimitedMoney();
+                }
+            }
+        }
+
+        [SettingsUIKeyboardBinding(BindingKeyboard.LeftBracket, AddMoneyAction)]
+        [SettingsUISection(kHotkeys, kHotkeyGroup)]
+        public ProxyBinding AddMoneyKeyboardBinding { get; set; }
+
+        [SettingsUIKeyboardBinding(BindingKeyboard.RightBracket, SubtractMoneyAction)]
+        [SettingsUISection(kHotkeys, kHotkeyGroup)]
+        public ProxyBinding SubtractMoneyKeyboardBinding { get; set; }
+
+        [SettingsUISection(kAbout, kAboutInfo)]
+        public string NameText => Mod.ModName;
+
+        [SettingsUISection(kAbout, kAboutInfo)]
+        public string VersionText =>
+#if DEBUG
+            Mod.ModVersion + " (DEBUG)";
+#else
+            Mod.ModVersion;
+#endif
+
+        [SettingsUIButton]
+        [SettingsUISection(kAbout, kAboutDiagnostics)]
+        public bool OpenLog
+        {
+            set
+            {
+                if (value)
+                {
+                    ShellOpen.OpenModLogOrLogsFolder();
+                }
+            }
+        }
+
+        private static bool IsInGame()
+        {
+            return GameManager.instance != null &&
+                   GameManager.instance.gameMode == GameMode.Game;
+        }
+
+        private bool CannotEnableCustomMilestoneInGame()
+        {
+            return IsInGame() && !CustomMilestone;
+        }
+
+        public bool EnsureAutomaticAddMoneyEnabled()
+        {
+            return !AutomaticAddMoney;
+        }
+
+        private bool GetMilestoneLevelStatus()
+        {
+            return IsInGame() || !CustomMilestone;
+        }
+
+        private bool CannotConvertUnlimitedMoneySave()
+        {
+            return !ConfirmUnlimitedMoneySaveConversion ||
+                   GetCityFinanceSystem()?.CanConvertUnlimitedMoneySave() != true;
+        }
+
+        private static CityFinanceSystem? GetCityFinanceSystem()
+        {
+            return World.DefaultGameObjectInjectionWorld?
+                .GetExistingSystemManaged<CityFinanceSystem>();
+        }
+
+        public DropdownItem<int>[] GetAutomaticAddMoneyThresholdItems()
+        {
+            return new[]
+            {
+                CreateDropdownItem(10000),
+                CreateDropdownItem(100000),
+                CreateDropdownItem(1000000),
+                CreateDropdownItem(10000000),
+            };
+        }
+
+        public DropdownItem<int>[] GetAutomaticAddMoneyAmountItems()
+        {
+            return new[]
+            {
+                CreateDropdownItem(10000),
+                CreateDropdownItem(100000),
+                CreateDropdownItem(1000000),
+                CreateDropdownItem(10000000),
+                CreateDropdownItem(100000000),
+            };
+        }
+
+        public DropdownItem<int>[] GetInitialMoneyItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = 0,
+                    displayName = GetOptionLocaleID("GameDefault"),
+                },
+                CreateDropdownItem(100000),
+                CreateDropdownItem(500000),
+                CreateDropdownItem(5000000),
+                CreateDropdownItem(10000000),
+                CreateDropdownItem(100000000),
+            };
+        }
+
+        private static DropdownItem<int>[] GetMilestoneLevelItems()
+        {
+            List<DropdownItem<int>> items = new();
+            for (int i = 0; i < s_Milestones.Length; i++)
+            {
+                items.Add(
+                    new DropdownItem<int>
+                    {
+                        value = i,
+                        displayName = MilestoneDisplay.Get(i, s_Milestones[i]),
+                    });
+            }
+
+            return items.ToArray();
+        }
+
+        private static DropdownItem<int> CreateDropdownItem(int value)
+        {
+            return new DropdownItem<int>
+            {
+                value = value,
+                displayName = value.ToString("N0"),
+            };
+        }
+
+        public override void SetDefaults()
+        {
+            ManualMoneyAmount = 40000;
+            AutomaticAddMoney = false;
+            AutomaticAddMoneyThreshold = 100000;
+            AutomaticAddMoneyAmount = 10000;
+            InitialMoney = 0;
+            CustomMilestone = false;
+            MilestoneLevel = kMilestoneTinyVillage;
+            ConfirmUnlimitedMoneySaveConversion = false;
+        }
+
+        public void NormalizeLoadedSettings()
+        {
+            if (ManualMoneyAmount < 20000 || ManualMoneyAmount > 2000000)
+            {
+                ManualMoneyAmount = 40000;
+            }
+
+            MilestoneLevel = Math.Clamp(MilestoneLevel, 0, s_Milestones.Length - 1);
+
+            if (InitialMoney < 0)
+            {
+                InitialMoney = 0;
+            }
+        }
+
+        public void ResetInitialMoney()
+        {
+            InitialMoney = 0;
+        }
+
+        public string GetOptionLocaleID(string localeId)
+        {
+            return $"Options[{id}.{localeId}]";
+        }
+    }
+}
