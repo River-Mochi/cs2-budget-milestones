@@ -49,7 +49,7 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.InitialMoney)),
                     "Sets the starting balance for the next loaded <limited-money> city — new or existing.\n" +
                     "After it applies once, this setting resets to Game Default.\n" +
-                    "If Milestone Selector jumps to a higher milestone, normal milestone cash rewards are added afterward, so the final balance will be higher.\n" +
+                    "If you choose a higher Starting Milestone, normal milestone cash rewards are added afterward, so the final balance will be higher.\n" +
                     "Enable <Disable Milestone Money Rewards> if you want to skip those cash bonuses."
                 },
                 { m_Settings.GetOptionLocaleID("GameDefault"), "Game Default" },
@@ -100,9 +100,19 @@ namespace BudgetMilestones
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)), "Network Demolition Cost" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)),
-                    "Charges this percentage of construction cost when bulldozing roads, paths, rail, pipes, cables, and other network segments.\n" +
-                    "<0% = vanilla: no added demolition charge.>\n" +
-                    "<Warning: 50% can drain your budget fast.> Players are used to free demolition, so keep an eye on your cash."
+                    "Adds a demolition charge based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.\n" +
+                    "<0% = vanilla behavior.> Recently built or modified networks may still receive the game's normal refund.\n" +
+                    "<Warning: 50% can drain your budget fast. Keep an eye on budget.>"
+                },
+
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)),
+                    "Reset to Game Defaults" },
+
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)),
+                    "Resets all <City Start Settings> to vanilla behavior:\n" +
+                    "Game Default money, no milestone skip, normal milestone cash rewards, and 0% network demolition cost.\n" +
+                    "Does not undo a milestone already applied to a city."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.AddMoneyKeyboardBinding)), "Add Money" },

@@ -34,7 +34,12 @@ namespace BudgetMilestones
 
     [FileLocation("ModsSettings/BudgetMilestones/BudgetMilestones")]
     [SettingsUITabOrder(kCityStart, kHotkeys, kAbout)]
-    [SettingsUIGroupOrder(kCityStartGroup, kBudgetGroup, kSaveConversion, kHotkeyGroup, kAboutInfo, kAboutLinks, kAboutDiagnostics)]
+
+    [SettingsUIGroupOrder(
+    kCityStartGroup, kSaveConversion, kBudgetGroup,
+    kHotkeyGroup,
+    kAboutInfo, kAboutLinks, kAboutDiagnostics)]
+
     [SettingsUIShowGroupName(kCityStartGroup, kBudgetGroup, kSaveConversion, kAboutDiagnostics)]
     public sealed class BMSettings : ModSetting
     {
@@ -127,6 +132,26 @@ namespace BudgetMilestones
         [SettingsUISlider(min = 0, max = 50, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
         [SettingsUISection(kCityStart, kCityStartGroup)]
         public int NetworkDemolitionCostPercent { get; set; }
+
+        [SettingsUIButton]
+        [SettingsUISection(kCityStart, kCityStartGroup)]
+        public bool ResetCityStartToGameDefaults
+        {
+            set
+            {
+                if (!value)
+                {
+                    return;
+                }
+
+                InitialMoney = 0;
+                MilestoneLevel = kMilestoneGameDefault;
+                DisableMilestoneMoneyRewards = false;
+                NetworkDemolitionCostPercent = 0;
+
+                Apply();
+            }
+        }
 
         [SettingsUISection(kCityStart, kSaveConversion)]
         public bool ConfirmUnlimitedMoneySaveConversion { get; set; }
