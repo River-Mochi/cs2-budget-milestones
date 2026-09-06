@@ -1,0 +1,37 @@
+<Publish>
+<!--Id must be set in order to update existing mod. Leave blank for first publish.-->
+<ModId Value="" />
+<DisplayName Value="Budget + Milestones" />
+<ShortDescription Value="Customize starting money and milestones, add simple budget tools, and optionally charge network demolition costs." />
+<LongDescription>
+### Budget + Milestones
+
+Set up your city the way you want — normal start, harder start, or a quick head start.
+
+#### City Start
+- Keep normal milestone progression or start at a milestone you choose.
+- Set starting money for the next limited-money city.
+- Keep normal milestone cash rewards or turn the cash bonuses off.
+- Optional network demolition cost from 0% to 50%.
+
+#### Budget Tools
+- Add or subtract a chosen amount with hotkeys.
+- Optional Auto Add Money can keep your balance above a selected threshold.
+
+#### Unlimited Money Converter
+- Convert an Unlimited Money save to normal limited-money budgeting.
+- Make a backup first. The mod cannot undo the conversion.
+
+**Vanilla-friendly defaults:** no milestone skip, normal milestone rewards, and 0% demolition cost.
+
+No Harmony patch.
+</LongDescription>
+<Tag Value="Code Mod" />
+<ModVersion Value="0.5.0" />
+<GameVersion Value="1.6.*" />
+<ChangeLog>
+- Initial release.
+</ChangeLog>
+<ExternalLink Type="github" Url="https://github.com/River-Mochi/cs2-budget-milestones" />
+<ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
+</Publish>
