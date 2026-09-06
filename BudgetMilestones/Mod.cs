@@ -32,6 +32,14 @@ namespace BudgetMilestones
         public const string ModId = "BudgetMilestones";
         public const string ModTag = "[BM]";
 
+#if DEBUG
+        private const string kBuildType = "DEBUG";
+#else
+        private const string kBuildType = "RELEASE";
+#endif
+
+        private static bool s_BannerLogged;
+
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
 
@@ -45,15 +53,18 @@ namespace BudgetMilestones
             LogUtils.Configure(ModId, s_Log);
             ShellOpen.Configure(s_Log, ModId, ModTag);
 
-#if DEBUG
-            LogUtils.Info($"{ModName} v{ModVersion} DEBUG loaded");
-#else
-            LogUtils.Info($"{ModName} v{ModVersion} loaded");
-#endif
-
-            if (GameManager.instance == null)
+            if (!s_BannerLogged)
             {
-                LogUtils.Warn($"{ModTag} GameManager.instance is null; {ModName} cannot initialize.");
+                s_BannerLogged = true;
+                LogUtils.Info(
+                    $"{ModName} {ModTag} v{ModVersion} [{kBuildType}] OnLoad");
+            }
+
+            GameManager? gameManager = GameManager.instance;
+            if (gameManager == null)
+            {
+                LogUtils.Warn(
+                    $"{ModTag} GameManager.instance is null; {ModName} cannot initialize.");
                 return;
             }
 
@@ -62,16 +73,39 @@ namespace BudgetMilestones
 
             try
             {
-                LocalizationManager? manager = GameManager.instance.localizationManager;
-                if (manager != null)
+                LocalizationManager? localizationManager =
+                    gameManager.localizationManager;
+
+                if (localizationManager == null)
                 {
-                    manager.AddSource("en-US", new LocaleEN(setting));
+                    LogUtils.Warn(
+                        $"{ModTag} LocalizationManager is null; locale sources were not registered.");
+                }
+                else
+                {
+                    localizationManager.AddSource("en-US", new LocaleEN(setting));
+                    localizationManager.AddSource("de-DE", new LocaleDE(setting));
+                    localizationManager.AddSource("fr-FR", new LocaleFR(setting));
+                    localizationManager.AddSource("es-ES", new LocaleES(setting));
+                    localizationManager.AddSource("it-IT", new LocaleIT(setting));
+                    localizationManager.AddSource("ja-JP", new LocaleJA(setting));
+                    localizationManager.AddSource("ko-KR", new LocaleKO(setting));
+                    localizationManager.AddSource("pl-PL", new LocalePL(setting));
+                    localizationManager.AddSource("pt-BR", new LocalePT_BR(setting));
+                    localizationManager.AddSource("pt-PT", new LocalePT_PT(setting));
+                    localizationManager.AddSource("zh-HANS", new LocaleZH_CN(setting));
+                    localizationManager.AddSource("zh-HANT", new LocaleZH_HANT(setting));
+                    localizationManager.AddSource("th-TH", new LocaleTH(setting));
+                    localizationManager.AddSource("vi-VN", new LocaleVI(setting));
+                    localizationManager.AddSource("tr-TR", new LocaleTR(setting));
+                    localizationManager.AddSource("uk-UA", new LocaleUK(setting));
                 }
             }
             catch (Exception ex)
             {
                 LogUtils.Error(
-                    $"{ModTag} Localization registration failed: {ex.GetType().Name}: {ex.Message}",
+                    $"{ModTag} Localization registration failed: " +
+                    $"{ex.GetType().Name}: {ex.Message}",
                     ex);
             }
 
