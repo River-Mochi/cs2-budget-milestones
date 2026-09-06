@@ -101,18 +101,16 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)), "Network Demolition Cost" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)),
                     "Adds a demolition charge based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.\n" +
-                    "<0% = vanilla behavior.> Recently built or modified networks may still receive the game's normal refund.\n" +
-                    "<Warning: 50% can drain your budget fast. Keep an eye on budget.>"
+                    "<0% = vanilla behavior.> The game's normal refund for recently built or modified networks still applies.\n" +
+                    "<Warning: 50% can drain your budget faster.>"
                 },
 
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)),
-                    "Reset to Game Defaults" },
-
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)), "Reset to Game Defaults" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)),
                     "Resets all <City Start Settings> to vanilla behavior:\n" +
                     "Game Default money, no milestone skip, normal milestone cash rewards, and 0% network demolition cost.\n" +
-                    "Does not undo a milestone already applied to a city."
+                    "Does not undo milestone changes already applied to a city."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.AddMoneyKeyboardBinding)), "Add Money" },
