@@ -1,4 +1,4 @@
-// <copyright file="NetworkDemolitionCostSystem.cs" company="River-Mochi">
+// <copyright file="NetworkDemoCostSystem.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -6,7 +6,7 @@
 // all copies or substantial portions of this code.
 // ================= </copyright> ======================
 
-// File: Systems/Tools/NetworkDemolitionCostSystem.cs
+// File: Systems/Tools/NetworkDemoCostSystem.cs
 // Purpose: Charges an optional percentage of current construction cost when bulldozing network segments.
 
 namespace BudgetMilestones.Systems
@@ -25,7 +25,7 @@ namespace BudgetMilestones.Systems
     using Unity.Collections;
     using Unity.Entities;
 
-    public partial class NetworkDemolitionCostSystem : GameSystemBase
+    public partial class NetworkDemoCostSystem : GameSystemBase
     {
         private CitySystem m_CitySystem = null!;
         private ToolSystem m_ToolSystem = null!;

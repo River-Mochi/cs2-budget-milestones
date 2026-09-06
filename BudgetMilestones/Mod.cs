@@ -105,7 +105,7 @@ namespace BudgetMilestones
 
             updateSystem.UpdateAt<CityFinanceSystem>(SystemUpdatePhase.ModificationEnd);
             updateSystem.UpdateAt<MilestoneSystem>(SystemUpdatePhase.ModificationEnd);
-            updateSystem.UpdateAt<NetworkDemolitionCostSystem>(SystemUpdatePhase.ToolUpdate);
+            updateSystem.UpdateAt<NetworkDemoCostSystem>(SystemUpdatePhase.ToolUpdate);
         }
 
         public void OnDispose()
