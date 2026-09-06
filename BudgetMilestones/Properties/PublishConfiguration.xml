@@ -2,30 +2,42 @@
 <!--Id must be set in order to update existing mod. Leave blank for first publish.-->
 <ModId Value="" />
 <DisplayName Value="Budget + Milestones" />
-<ShortDescription Value="Customize city start: simple budget tools, set milestones, disable milestone reward money, charge network demolition costs." />
+<ShortDescription Value="Customize City Start, milestones, budget tools, milestone rewards, and optional network demolition costs." />
 <LongDescription>
-### Budget + Milestones
+    ### Budget + Milestones
 
-Set up your city the way you want — normal start, harder start, or a quick head start.
+    Set up the city the way you want — normal start, harder start, or a quick head start.
 
-#### City Start
-- Keep normal milestone progression or start at a milestone you choose.
-- Set starting money for the next limited-money city.
-- Keep normal milestone cash rewards or turn the cash bonuses off.
-- Optional network demolition cost from 0% to 50%.
+    #### City Start
+    - Keep normal milestone progression or start at a milestone you choose.
+    - Set starting money for the next limited-money city.
+    - Disable milestone cash bonuses if you like.
+    - Real challenges: add demolition cost based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.
+    - Game normally still refunds partially for recently built or modified networks.
 
-#### Budget Tools
-- Add or subtract a chosen amount with hotkeys.
-- Optional Auto Add Money can keep your balance above a selected threshold.
+    #### Unlimited Money Converter
+    - Convert an Unlimited Money save to normal limited-money budgeting.
+    - Make a backup first. The mod cannot undo the conversion.
 
-#### Unlimited Money Converter
-- Convert an Unlimited Money save to normal limited-money budgeting.
-- Make a backup first. The mod cannot undo the conversion.
+    #### Budget Tools
+    - Add or subtract a chosen amount with hotkeys.
+    - Optional Auto Add Money can keep your balance above a selected threshold.
+    - Subtract Money can take the balance below zero, just like the game allows.
 
-**Vanilla-friendly defaults:** no milestone skip, normal milestone rewards, and 0% demolition cost.
+    #### Good to know
+    - Lightweight design: safe to remove, no Harmony patch, or impact on city performance.
+    - Some of these tools were originally in City Watchdog mod but now spun off and explanded with more features.
 
-No Harmony patch.
+    #### Languages Supported
+    English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski,
+    Português Brasileiro, Português Portugal, ไทย, Türkçe, Українська, Tiếng Việt,
+    简体中文, and 繁體中文.
+
+    #### Credits
+    River-Mochi mod author
+
 </LongDescription>
+
 <Tag Value="Code Mod" />
 <ModVersion Value="0.5.0" />
 <GameVersion Value="1.6.*" />
