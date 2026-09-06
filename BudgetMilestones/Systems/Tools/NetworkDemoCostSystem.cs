@@ -51,8 +51,8 @@ namespace BudgetMilestones.Systems
         protected override void OnUpdate()
         {
             if (GameManager.instance.gameMode != GameMode.Game ||
-            BMSettings.Instance.NetworkDemolitionCostPercent <= 0 ||
-            m_ToolSystem.activeTool != m_BulldozeToolSystem)
+                BMSettings.Instance.NetworkDemolitionCostPercent <= 0 ||
+                m_ToolSystem.activeTool != m_BulldozeToolSystem)
             {
                 ResetPreview();
                 return;
@@ -63,14 +63,14 @@ namespace BudgetMilestones.Systems
 
             if (!isApplying)
             {
-                m_PreviewCost = CalculateCurrentNetworkDemolitionCost();
+                m_PreviewCost = CalculateCurrentNetworkDemoCost();
             }
             else if (!m_WasApplying)
             {
                 int cost = m_PreviewCost;
                 if (cost <= 0)
                 {
-                    cost = CalculateCurrentNetworkDemolitionCost();
+                    cost = CalculateCurrentNetworkDemoCost();
                 }
 
                 ApplyDemolitionCost(cost);
@@ -79,7 +79,7 @@ namespace BudgetMilestones.Systems
             m_WasApplying = isApplying;
         }
 
-        private int CalculateCurrentNetworkDemolitionCost()
+        private int CalculateCurrentNetworkDemoCost()
         {
             int percent = BMSettings.Instance.NetworkDemolitionCostPercent;
             if (percent <= 0)
@@ -219,10 +219,13 @@ namespace BudgetMilestones.Systems
             playerMoney.Subtract(cost);
             EntityManager.SetComponentData(city, playerMoney);
 
+#if DEBUG
             LogUtils.Info(() =>
                 $"Network demolition cost: {cost:N0} " +
                 $"({BMSettings.Instance.NetworkDemolitionCostPercent}%). " +
                 $"Money {previousMoney:N0} -> {playerMoney.money:N0}");
+#endif
+
         }
 
         private void ResetPreview()

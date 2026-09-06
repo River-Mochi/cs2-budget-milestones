@@ -118,8 +118,12 @@ namespace BudgetMilestones
                 { m_Settings.GetBindingKeyLocaleID(BMSettings.AddMoneyAction), "Add Money" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.SubtractMoneyKeyboardBinding)), "Subtract Money" },
-                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.SubtractMoneyKeyboardBinding)), "Hotkey to <Subtract Money> inside the city." },
+                { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.SubtractMoneyKeyboardBinding)),
+                    "Hotkey to <Subtract Money> when in the city. Balance can go below zero."
+                },
+
                 { m_Settings.GetBindingKeyLocaleID(BMSettings.SubtractMoneyAction), "Subtract Money" },
+
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ConfirmUnlimitedMoneySaveConversion)), "Unlimited Money Converter" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ConfirmUnlimitedMoneySaveConversion)),
