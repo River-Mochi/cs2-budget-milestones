@@ -152,7 +152,7 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.VersionText)), "Version" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.VersionText)), "Current mod version." },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenParadox)), "Mochi's Paradox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.OpenParadox)), "Open River-Mochi's Paradox Mods page." },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.OpenDiscord)), "Discord" },
