@@ -49,9 +49,12 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.InitialMoney)),
                     "Sets the starting balance for the next loaded <limited-money> city — new or existing.\n" +
                     "After it applies once, this setting resets to Game Default.\n" +
+                    "<If this option is grayed out>, exit to the Main Menu (or restart the game), then open Options again.\n" +
                     "If you choose a higher Starting Milestone, normal milestone cash rewards are added afterward, so the final balance will be higher.\n" +
                     "Enable <Disable Milestone Money Rewards> if you want to skip those cash bonuses."
                 },
+
+
                 { m_Settings.GetOptionLocaleID("GameDefault"), "Game Default" },
 
                 { m_Settings.GetOptionLocaleID("NoExtraMilestone"), "Game Default - No Milestone Skip" },
