@@ -26,7 +26,7 @@ namespace BudgetMilestones.Systems
 
     using Unity.Entities;
 
-    public partial class CityFinanceSystem : GameSystemBaseExtension
+    public partial class CityFinanceSystem : GameSystemBase
     {
         private const int kAutomaticMoneyCheckIntervalUpdates = 128;
         private const int kManualMoneyRepeatInitialDelayUpdates = 20;
@@ -196,7 +196,7 @@ namespace BudgetMilestones.Systems
 
         protected override void OnUpdate()
         {
-            if (!InGame)
+            if (GameManager.instance.gameMode != GameMode.Game)
             {
                 m_AutomaticMoneyCheckCooldown = 0;
                 ResetManualMoneyRepeat();

@@ -13,17 +13,19 @@ namespace BudgetMilestones.Systems
 {
     using CS2Shared.RiverMochi;
 
+    using Game;
     using Game.City;
     using Game.Common;
     using Game.Net;
     using Game.Prefabs;
+    using Game.SceneFlow;
     using Game.Simulation;
     using Game.Tools;
 
     using Unity.Collections;
     using Unity.Entities;
 
-    public partial class NetworkDemolitionCostSystem : GameSystemBaseExtension
+    public partial class NetworkDemolitionCostSystem : GameSystemBase
     {
         private CitySystem m_CitySystem = null!;
         private ToolSystem m_ToolSystem = null!;
@@ -48,9 +50,9 @@ namespace BudgetMilestones.Systems
 
         protected override void OnUpdate()
         {
-            if (!InGame ||
-                BMSettings.Instance.NetworkDemolitionCostPercent <= 0 ||
-                m_ToolSystem.activeTool != m_BulldozeToolSystem)
+            if (GameManager.instance.gameMode != GameMode.Game ||
+            BMSettings.Instance.NetworkDemolitionCostPercent <= 0 ||
+            m_ToolSystem.activeTool != m_BulldozeToolSystem)
             {
                 ResetPreview();
                 return;

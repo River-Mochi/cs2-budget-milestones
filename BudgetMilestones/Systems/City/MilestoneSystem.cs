@@ -17,16 +17,18 @@ namespace BudgetMilestones.Systems
 
     using CS2Shared.RiverMochi;
 
+    using Game;
     using Game.City;
     using Game.Common;
     using Game.Prefabs;
+    using Game.SceneFlow;
     using Game.Simulation;
 
     using Unity.Collections;
     using Unity.Entities;
     using Unity.Mathematics;
 
-    public partial class MilestoneSystem : GameSystemBaseExtension
+    public partial class MilestoneSystem : GameSystemBase
     {
         private readonly Dictionary<int, int> m_OriginalMoneyRewards = new();
 
@@ -87,7 +89,7 @@ namespace BudgetMilestones.Systems
             CacheMilestoneMoneyRewards();
             ApplyMilestoneMoneyRewardSetting(force: true);
 
-            if (InGame)
+            if (GameManager.instance.gameMode == GameMode.Game)
             {
                 ApplyConfiguredMilestone();
             }
@@ -95,7 +97,7 @@ namespace BudgetMilestones.Systems
 
         protected override void OnUpdate()
         {
-            if (!InGame || !m_HasCachedMoneyRewards)
+            if (GameManager.instance.gameMode != GameMode.Game || !m_HasCachedMoneyRewards)
             {
                 return;
             }
