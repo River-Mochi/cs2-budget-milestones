@@ -4,37 +4,37 @@
 <DisplayName Value="Budget + Milestones" />
 <ShortDescription Value="Customize City Start, milestones, budget tools, milestone rewards, and optional network demolition costs." />
 <LongDescription>
-    ### Budget + Milestones
+### Budget + Milestones
 
-    Set up the city the way you want — normal start, harder start, or a quick head start.
+Set up the city the way you want — normal start, harder start, or a quick head start.
 
-    #### City Start
-    - Keep normal milestone progression or start at a milestone you choose.
-    - Set starting money for the next limited-money city.
-    - Disable milestone cash bonuses if you like.
-    - Real challenges: add demolition cost based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.
-    - Game normally still refunds partially for recently built or modified networks.
+#### City Start
+- Keep normal milestone progression or start at a milestone you choose.
+- Set starting money for the next limited-money city.
+- Disable milestone cash bonuses if you like.
+- Real challenges: add demolition cost based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.
+- Game normally still refunds partially for recently built or modified networks.
 
-    #### Unlimited Money Converter
-    - Convert an Unlimited Money save to normal limited-money budgeting.
-    - Make a backup first. The mod cannot undo the conversion.
+#### Unlimited Money Converter
+- Convert an Unlimited Money save to normal limited-money budgeting.
+- Make a backup first. The mod cannot undo the conversion.
 
-    #### Budget Tools
-    - Add or subtract a chosen amount with hotkeys.
-    - Optional Auto Add Money can keep your balance above a selected threshold.
-    - Subtract Money can take the balance below zero, just like the game allows.
+#### Budget Tools
+- Add or subtract a chosen amount with hotkeys.
+- Optional Auto Add Money can keep your balance above a selected threshold.
+- Subtract Money can take the balance below zero, just like the game allows.
 
-    #### Good to know
-    - Lightweight design: safe to remove, no Harmony patch, or impact on city performance.
-    - Some of these tools were originally in City Watchdog mod but now spun off and explanded with more features.
+#### Good to know
+- Lightweight design: safe to remove, no Harmony patch, or impact on city performance.
+- Some of these tools were originally in City Watchdog mod but now spun off and explanded with more features.
 
-    #### Languages Supported
-    English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski,
-    Português Brasileiro, Português Portugal, ไทย, Türkçe, Українська, Tiếng Việt,
-    简体中文, and 繁體中文.
+#### Languages Supported
+English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski,
+Português Brasileiro, Português Portugal, ไทย, Türkçe, Українська, Tiếng Việt,
+简体中文, and 繁體中文.
 
-    #### Credits
-    River-Mochi mod author
+#### Credits
+River-Mochi mod author
 
 </LongDescription>
 
