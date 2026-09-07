@@ -12,13 +12,12 @@
 #   Safely check/fix CRLF or mixed line endings, missing trailing newline,
 #   and UTF-8 BOM in Git-tracked repo text files that are supposed to be LF.
 #
-# Safe policy for VS2026 + GitHub:
+# Policy for VS2026 + GitHub:
 #   - Only Git-tracked files are scanned.
 #   - Binary-looking files are skipped.
 #   - .sln stays CRLF and is NEVER touched by this script.
 #   - .bat and .cmd stay CRLF and are NEVER touched by this script.
-#   - .slnx is treated as LF because River-Mochi repos usually set:
-#       *.slnx text eol=lf
+#   - .slnx is LF, b/c all River-Mochi repos set: *.slnx text eol=lf
 #   - UTF-8 BOM is removed automatically when --fix is used.
 #   - Non-empty files without a trailing LF get one appended, matching:
 #       insert_final_newline = true
