@@ -37,15 +37,28 @@ Português Brasileiro, Português Portugal, ไทย, Türkçe, Українс�
 #### Credits
 River-Mochi - mod author
 Nukprach - tester
+Thumbnail photo edited from: Arto Marttinen, Sunset over Tokyo, license: https://unsplash.com/photos/aerial-view-of-city-during-golden-hour-6xh7H5tWj9c
 
 </LongDescription>
 
+<!--Thumbnail-->
+<Thumbnail Value="Properties/Thumbnail-arto-marttinen.jpg" />
+<!--Screenshot, can be set multiple times-->
+<Screenshot Value="Properties/image10-Options.jpg" />
+<!--Tag, can be set multiple times-->
 <Tag Value="Code Mod" />
+<!--Link to the forum post where the mod can be discussed-->
+<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/city-watchdog.1924169/" />
+<!--Version of the mod-->
 <ModVersion Value="0.5.0" />
+<!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
+<!--Dependency for the mod, can be set multiple times-->
+<Dependency Id="" DisplayName="" />
+<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Initial release.
 </ChangeLog>
-<ExternalLink Type="github" Url="https://github.com/River-Mochi/cs2-budget-milestones" />
+<!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon, buymeacoffee, kofi, crowdin, gitlab-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
+<ExternalLink Type="github" Url="https://github.com/River-Mochi/cs2-budget-milestones" />
 </Publish>
