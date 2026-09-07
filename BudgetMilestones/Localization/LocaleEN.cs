@@ -104,10 +104,10 @@ namespace BudgetMilestones
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)), "Network Demolition Cost" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.NetworkDemolitionCostPercent)),
                     "Adds a demolition charge based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.\n" +
-                    "<0% = vanilla behavior.> The game's normal refund for recently built or modified networks still applies.\n" +
-                    "<Warning: 50% can drain your budget faster.>"
+                    "<0% = vanilla behavior.>\n" +
+                    "Note: the game normally refunds for <recently> built or modified networks. This still applies on top of whatever you do here.\n" +
+                    "Challenge Mode: <Warning: 50% can drain your budget faster>"
                 },
-
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)), "Reset to Game Defaults" },
                 { m_Settings.GetOptionDescLocaleID(nameof(BMSettings.ResetCityStartToGameDefaults)),
