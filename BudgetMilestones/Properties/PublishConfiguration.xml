@@ -2,7 +2,7 @@
 <!--Id must be set in order to update existing mod. Leave blank for first publish.-->
 <ModId Value="" />
 <DisplayName Value="Budget + Milestones" />
-<ShortDescription Value="Customize City Start, milestones, budget tools, milestone rewards, and optional network demolition costs." />
+<ShortDescription Value="Customize City Start, milestones, budget tools, milestone rewards. Optional network demolition costs." />
 <LongDescription>
 ### Budget + Milestones
 
