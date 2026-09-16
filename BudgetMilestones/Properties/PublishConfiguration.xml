@@ -13,10 +13,10 @@ Set up the city the way you want — normal start, harder start, or a quick head
 - Set starting money for the next limited-money city.
 - Disable milestone cash bonuses if you like a challenge.
 - Real challenges: add demolition cost based on the network's construction cost when removing roads, paths, rail, pipes, cables, and other networks.
-- The game's normal refund for recently built networks still applies (yes, the game gives you a refund if you demo a road you just built).
+- Offset the refund by using the demolition cost in the mod Options menu.
 
 #### Unlimited Money Converter
-- Convert an Unlimited Money save to normal limited-money city.
+- Disable an Unlimited Money save, convert it to a normal limited-money city.
 - Make a backup first; conversion cannot be undone.
 
 #### Budget Tools
@@ -25,19 +25,22 @@ Set up the city the way you want — normal start, harder start, or a quick head
 - Subtract Money can take the balance below zero, just like the game allows.
 
 #### Good to know
-- Most tools were originally in [City Watchdog (CWD) mod](https://mods.paradoxplaza.com/mods/144908/Windows)
+- Lightweight design: safe to remove, no Harmony patch or performance impact on city.
+- Most budget tools were originally in [City Watchdog (CWD) mod](https://mods.paradoxplaza.com/mods/144908/Windows)
 - now spun-off and expanded here (and removed from CWD).
-- Lightweight design: safe to remove, no Harmony patch, or performance impact on city.
 
-#### Languages Supported
-English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski,
-Português Brasileiro, Português Portugal, ไทย, Türkçe, Українська, Tiếng Việt,
-简体中文, and 繁體中文.
+#### Support and Feedback
 
-#### Credits
-River-Mochi - mod author
-Nukprach - tester
-Thumbnail photo edited from: Arto Marttinen, Sunset over Tokyo, license: https://unsplash.com/photos/aerial-view-of-city-during-golden-hour-6xh7H5tWj9c
+- Enjoy and support by clicking LIKE 👍 (top right); helps people know about the mod, no donations requested.
+- Feedback through the GitHub or Discord icon links on the right. PRs are welcome.
+
+#### 16 Languages Supported
+English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski, Português Brasileiro, Português Portugal, ไทย, Türkçe, Українська, Tiếng Việt, 简体中文, and 繁體中文.
+
+### ❤️ Credits and Thanks
+- River-Mochi - mod author
+- Nukprach - tester
+- Thumbnail photo edited from: Arto Marttinen, Sunset over Tokyo, license: https://unsplash.com/photos/aerial-view-of-city-during-golden-hour-6xh7H5tWj9c
 
 </LongDescription>
 
@@ -50,7 +53,7 @@ Thumbnail photo edited from: Arto Marttinen, Sunset over Tokyo, license: https:/
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/budget-milestones.1940854/" />
 <!--Version of the mod-->
-<ModVersion Value="0.5.0" />
+<ModVersion Value="0.5.1" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
