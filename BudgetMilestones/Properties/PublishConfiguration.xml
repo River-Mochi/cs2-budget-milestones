@@ -20,7 +20,7 @@ Set up the city the way you want — normal start, harder start, or a quick head
 - Make a backup first; conversion cannot be undone.
 
 #### Budget Tools
-- Add or subtract a chosen amount with hotkeys.
+- Add or subtract a chosen amount of money with hotkeys.
 - Optional Auto Add Money can keep your balance above a selected threshold.
 - Subtract Money can take the balance below zero, just like the game allows.
 
@@ -53,7 +53,7 @@ English, Deutsch, Español, Français, Italiano, 日本語, 한국어, Polski, P
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/budget-milestones.1940854/" />
 <!--Version of the mod-->
-<ModVersion Value="0.5.1" />
+<ModVersion Value="0.5.2" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
